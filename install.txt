@@ -1,0 +1,53 @@
+# setup virtual environment
+sudo apt-get install python-pip
+sudo pip install virtualenvwrapper
+export WORKON_HOME=~/projects/Envs
+mkdir -p $WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+mkvirtualenv tree_env --no-site-packages
+workon tree_env
+
+#настройка проавильной кодировки
+#выполнить это команду в консоли, из виртуального окружения
+python -c 'import sys; print sys.getdefaultencoding()'
+#если результат не равен utf-8 (обычно по умолчанию результат он равен ascii)
+# то нужно выполнить это команду
+#setup encoding for project
+echo "# -*- coding: utf-8 -*-
+import sys
+sys.setdefaultencoding('utf-8')
+
+try:
+    import apport_python_hook
+except ImportError:
+    pass
+else:
+    apport_python_hook.install()
+" > $WORKON_HOME/tree_env/lib/python2.7/sitecustomize.py
+
+deactivate
+
+# setup project catalog
+mkdir $HOME/projects
+cd $HOME/projects
+git clone https://github.com/ivan133/tree_test.git
+cd tree_test
+
+# setup tree_env
+workon tree_env
+
+# install necessary packages for the project to current virtualenv
+pip install -r requirements.txt
+
+# start django server
+./manage.py runserver
+
+запустить тесты на пустой базе (необходимое окружение создается)
+
+Можно посмотреть API в models.py
+
+Можно заполнить данные через админку джанго
+http://127.0.0.1:8000/admin/
+
+Можно слать рест запросы (пока только GET)
+http://127.0.0.1:8000/api/region/3/?format=json
