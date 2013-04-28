@@ -1,0 +1,4 @@
+#TODO разделить на тесторый и продакшн
+django-tastypie
+django-devserver
+factory-boy
